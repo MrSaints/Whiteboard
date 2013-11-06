@@ -2,32 +2,41 @@ var $whiteboard = new DrawingBoard.Board('js-whiteboard', {
 	controls: false
 });
 
-var $coords = {};
-
 $whiteboard.ev.bind('board:startDrawing', function ($data) {
-	$coords.current = $coords.last = $data.coords;
-	$coords.last_mid = $whiteboard._getMidInputCoords($data.coords);
+	console.log('Click!');
 });
 
-$whiteboard.ev.bind('board:drawing', function ($data) {
-	if (TogetherJS.running && $whiteboard.isDrawing) {
-		$coords.current = $data.coords;
-		$coords.current_mid = $whiteboard._getMidInputCoords($coords.current);
+if (TogetherJS.running) {
+	var $coords = {};
 
-        TogetherJS.send({
-            type: "draw",
-            coords: $coords
-        });
+	$whiteboard.ev.bind('board:startDrawing', function ($data) {
+		$coords.current = $coords.last = $data.coords;
+		$coords.last_mid = $whiteboard._getMidInputCoords($data.coords);
+	});
 
-        $coords.last = $coords.current;
-        $coords.last_mid = $coords.current_mid;
-	}
-});
+	$whiteboard.ev.bind('board:drawing', function ($data) {
+		if ($whiteboard.isDrawing) {
+			$coords.current = $data.coords;
+			$coords.current_mid = $whiteboard._getMidInputCoords($coords.current);
 
-$whiteboard.ev.bind('board:mouseOver', function ($data) {
-	$coords.last = $whiteboard._getInputCoords($data.e);
-	$coords.last_mid = $whiteboard._getMidInputCoords($coords.last);
-});
+			/*
+			 * Remote Draw
+			 */
+	        TogetherJS.send({
+	            type: "draw",
+	            coords: $coords
+	        });
+
+	        $coords.last = $coords.current;
+	        $coords.last_mid = $coords.current_mid;
+		}
+	});
+
+	$whiteboard.ev.bind('board:mouseOver', function ($data) {
+		$coords.last = $whiteboard._getInputCoords($data.e);
+		$coords.last_mid = $whiteboard._getMidInputCoords($coords.last);
+	});
+}
 
 TogetherJS.hub.on("draw", function ($data) {
     $whiteboard.remoteDraw($data.coords);
