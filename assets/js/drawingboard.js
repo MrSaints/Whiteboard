@@ -568,6 +568,13 @@ DrawingBoard.Board.prototype = {
 		if (window.requestAnimationFrame) requestAnimationFrame( $.proxy(function() { this.draw(); }, this) );
 	},
 
+	remoteDraw: function ($coords) {
+		this.ctx.beginPath();
+		this.ctx.moveTo($coords.current_mid.x, $coords.current_mid.y);
+		this.ctx.quadraticCurveTo($coords.last.x, $coords.last.y, $coords.last_mid.x, $coords.last_mid.y);
+		this.ctx.stroke();
+	},
+
 	_onInputStart: function(e, coords) {
 		this.coords.current = this.coords.old = coords;
 		this.coords.oldMid = this._getMidInputCoords(coords);
