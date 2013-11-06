@@ -1,0 +1,16 @@
+@import "compass";
+@import "compass/layout";
+@import "partials/normalize";
+
+html, body, .whiteboard {
+	@include stretch;
+	overflow: hidden;
+	z-index: 1;
+}
+
+.tjs-start {
+	bottom: 5px;
+	right: 5px;
+	position: absolute;
+	z-index: 2;
+}
