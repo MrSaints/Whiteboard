@@ -1430,7 +1430,7 @@
     };
 
     CircleTool.prototype["continue"] = function(x, y, lc) {
-      this.currentShape.radius = Math.sqrt(Math.pow(x - this.currentShape.x, 2), Math.pow(y - this.currentShape.y, 2));
+      this.currentShape.radius = Math.sqrt(Math.pow(x - this.currentShape.x, 2) + Math.pow(y - this.currentShape.y, 2));
       return lc.update(this.currentShape);
     };
 
@@ -1539,8 +1539,7 @@
     };
 
     Pan.prototype["continue"] = function(x, y, lc) {
-      lc.pan(this.start.x - x, this.start.y - y);
-      return lc.repaint();
+      return lc.pan(this.start.x - x, this.start.y - y);
     };
 
     return Pan;
